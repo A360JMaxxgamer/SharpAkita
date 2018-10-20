@@ -19,7 +19,6 @@ namespace SharpAkita.Api.Query
             {
                 entities.Add(entity.Key, entity.Value);
             }
-            entities.PropertyChanged += OnEntitiesChanged;
         }
 
         private void StoreEntityChanged(object sender, string e)
@@ -30,11 +29,6 @@ namespace SharpAkita.Api.Query
         private void StoreEntityAdded(object sender, string e)
         {
             entities.Add(e, store.GetById(e));
-        }
-
-        private void OnEntitiesChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            throw new NotImplementedException();
         }
     }
 }
