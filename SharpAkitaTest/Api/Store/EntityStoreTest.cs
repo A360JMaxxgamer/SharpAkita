@@ -90,7 +90,7 @@ namespace SharpAkitaTest.api
         }
 
         [TestMethod]
-        public void SelectTest()
+        public void SelectWithConditionTest()
         {
             var test1 = new StoreTestEntity { IntValue = 1};
             var test2 = new StoreTestEntity { IntValue = 1};
@@ -104,6 +104,22 @@ namespace SharpAkitaTest.api
 
             Assert.AreEqual(2, select.Count);
             Assert.IsTrue(select.All(e => e.Value.IntValue == 1));
+        }
+
+        [TestMethod]
+        public void SelectTest()
+        {
+            var test1 = new StoreTestEntity { IntValue = 1 };
+            var test2 = new StoreTestEntity { IntValue = 1 };
+            var test3 = new StoreTestEntity { IntValue = 2 };
+            var store = new EntityStore<StoreTestEntity>();
+            store.Add("1", test1);
+            store.Add("2", test2);
+            store.Add("3", test3);
+
+            var select = store.Select();
+
+            Assert.AreEqual(3, select.Count);
         }
     }
 
