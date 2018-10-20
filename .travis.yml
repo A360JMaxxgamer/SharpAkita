@@ -10,7 +10,7 @@ script:
 
 addons:
   sonarcloud:
-    organization: "A360JMaxxgamer" 
+    organization: "a360jmaxxgamer-github" 
     token:
       secure: "06629bf463d46b858e81924604a8d58c77950958"
 script:
