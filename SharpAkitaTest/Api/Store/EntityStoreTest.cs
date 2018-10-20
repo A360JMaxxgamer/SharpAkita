@@ -21,6 +21,18 @@ namespace SharpAkitaTest.api
         }
 
         [Fact]
+        public void AddUndoAddTest()
+        {
+            var store = new EntityStore<StoreTestEntity>();
+
+            store.Add("1", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
+            store.Undo();
+            store.Add("1", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
+
+            Assert.Equal(1, store.Count);
+        }
+
+        [Fact]
         public void UpdateByPropertiesTest()
         {
             var entityForCheck = new StoreTestEntity();
@@ -45,7 +57,25 @@ namespace SharpAkitaTest.api
         }
 
         [Fact]
-        public void UndoTest()
+        public void UndoUpdateTest()
+        {
+            var entity = new StoreTestEntity { IntValue = 1, StringValue = "Hello" };
+            var store = new EntityStore<StoreTestEntity>();
+            store.Add("1", entity);
+            var valueDic = new Dictionary<string, object>
+            {
+                { nameof(StoreTestEntity.IntValue), 4 },
+                { nameof(StoreTestEntity.StringValue), "Hello world" }
+            };
+            store.UpdateByProperties("1", valueDic);
+
+            store.Undo();
+
+            Assert.Equal("Hello", entity.StringValue);
+        }
+
+        [Fact]
+        public void UndoAddTest()
         {
             var store = new EntityStore<StoreTestEntity>();
             store.Add("1", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
@@ -56,7 +86,7 @@ namespace SharpAkitaTest.api
         }
 
         [Fact]
-        public void RedoTest()
+        public void RedoAddTest()
         {
             var entityForCheck = new StoreTestEntity();
             var store = new EntityStore<StoreTestEntity>();
