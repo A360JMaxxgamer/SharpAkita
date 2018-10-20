@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SharpAkita.Api.Store;
+using Xunit;
 
 namespace SharpAkitaTest.api
 {
-    [TestClass]
     public class EntityStoreTest
     {
-        [TestMethod]
+        [Fact]
         public void AddTest()
         {
             var entityForCheck = new StoreTestEntity();
@@ -17,11 +16,11 @@ namespace SharpAkitaTest.api
 
             store.Add("1", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
 
-            Assert.AreEqual(1, store.Count);
-            Assert.AreEqual("Hello", entityForCheck.StringValue);
+            Assert.Equal(1, store.Count);
+            Assert.Equal("Hello", entityForCheck.StringValue);
         }
 
-        [TestMethod]
+        [Fact]
         public void UpdateByPropertiesTest()
         {
             var entityForCheck = new StoreTestEntity();
@@ -40,12 +39,12 @@ namespace SharpAkitaTest.api
 
             store.UpdateByProperties("1", valueDic);
 
-            Assert.AreEqual(1, store.Count);
-            Assert.AreEqual(4, entityForCheck.IntValue);
-            Assert.AreEqual("Hello world", entityForCheck.StringValue);
+            Assert.Equal(1, store.Count);
+            Assert.Equal(4, entityForCheck.IntValue);
+            Assert.Equal("Hello world", entityForCheck.StringValue);
         }
 
-        [TestMethod]
+        [Fact]
         public void UndoTest()
         {
             var store = new EntityStore<StoreTestEntity>();
@@ -53,10 +52,10 @@ namespace SharpAkitaTest.api
 
             store.Undo();
 
-            Assert.AreEqual(0, store.Count);
+            Assert.Equal(0, store.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void RedoTest()
         {
             var entityForCheck = new StoreTestEntity();
@@ -71,11 +70,11 @@ namespace SharpAkitaTest.api
 
             store.Redo();
 
-            Assert.AreEqual(1, store.Count);
-            Assert.AreEqual("Hello", entityForCheck.StringValue);
+            Assert.Equal(1, store.Count);
+            Assert.Equal("Hello", entityForCheck.StringValue);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetByIdTest()
         {
             var test = new StoreTestEntity();
@@ -86,10 +85,10 @@ namespace SharpAkitaTest.api
 
             var result = store.GetById("2");
             
-            Assert.AreEqual(test2, result);
+            Assert.Equal(test2, result);
         }
 
-        [TestMethod]
+        [Fact]
         public void SelectWithConditionTest()
         {
             var test1 = new StoreTestEntity { IntValue = 1};
@@ -102,11 +101,11 @@ namespace SharpAkitaTest.api
 
             var select = store.Select(e => e.IntValue == 1);
 
-            Assert.AreEqual(2, select.Count);
-            Assert.IsTrue(select.All(e => e.Value.IntValue == 1));
+            Assert.Equal(2, select.Count);
+            Assert.True(select.All(e => e.Value.IntValue == 1));
         }
 
-        [TestMethod]
+        [Fact]
         public void SelectTest()
         {
             var test1 = new StoreTestEntity { IntValue = 1 };
@@ -119,7 +118,7 @@ namespace SharpAkitaTest.api
 
             var select = store.Select();
 
-            Assert.AreEqual(3, select.Count);
+            Assert.Equal(3, select.Count);
         }
     }
 
