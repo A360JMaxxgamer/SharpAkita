@@ -77,6 +77,16 @@ namespace SharpAkita.Api.Store
         }
 
         /// <summary>
+        /// Return sentities as an readonly dictionary.
+        /// </summary>
+        /// <param name="match"></param>
+        /// <returns></returns>
+        public IReadOnlyDictionary<string, TEntity> Select()
+        {
+            return new ReadOnlyDictionary<string, TEntity>(Entites.ToDictionary(e => e.Key, e => e.Value));
+        }
+
+        /// <summary>
         /// Redo a reverted action.
         /// </summary>
         public void Redo()
