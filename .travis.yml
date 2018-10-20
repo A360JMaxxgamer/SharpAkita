@@ -6,7 +6,7 @@ install:
   - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
 script:
   - xbuild /p:Configuration=Release SharpAkita.sln
-  - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./SharpAkitaTest.Tests/bin/Release/SharpAkitaTest.Tests.dll
+  - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./SharpAkitaTest/bin/Release/netcoreapp2.1/SharpAkitaTest.dll
 
 addons:
   sonarcloud:
