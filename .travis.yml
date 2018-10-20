@@ -7,3 +7,11 @@ install:
 script:
   - xbuild /p:Configuration=Release SharpAkita.sln
   - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./SharpAkitaTest.Tests/bin/Release/SharpAkitaTest.Tests.dll
+
+addons:
+  sonarcloud:
+    organization: "A360JMaxxgamer" 
+    token:
+      secure: "06629bf463d46b858e81924604a8d58c77950958"
+script:
+  - sonar-scanner
