@@ -57,6 +57,17 @@ namespace SharpAkita.Api.Store
         }
 
         /// <summary>
+        /// Removes the entity from the store.
+        /// </summary>
+        /// <param name="id">Id of the entity.</param>
+        public void Remove(string id)
+        {
+            var removeCommand = new RemoveEntityCommand<TEntity>(id, this);
+            history.Add(removeCommand);
+            history.Do();
+        }
+
+        /// <summary>
         /// Returns the specific entity for <paramref name="id"/>.
         /// </summary>
         /// <param name="id"></param>
