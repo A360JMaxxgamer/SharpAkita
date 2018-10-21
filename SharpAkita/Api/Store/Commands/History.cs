@@ -31,7 +31,7 @@ namespace SharpAkita.Api.Store.Commands
         internal void Add(IStoreCommand command)
         {
             // remove all after current command
-            var commandsToRemove = history.Where(c => history.IndexOf(c) > lastCommandIndex);
+            var commandsToRemove = history.Where(c => history.IndexOf(c) >= lastCommandIndex).ToList();
             foreach (var c in commandsToRemove)
             {
                 history.Remove(c);

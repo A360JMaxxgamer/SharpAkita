@@ -26,10 +26,13 @@ namespace SharpAkitaTest.api
             var store = new EntityStore<StoreTestEntity>();
 
             store.Add("1", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
+            store.Add("2", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
+            store.Add("3", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
             store.Undo();
-            store.Add("1", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
+            store.Undo();
+            store.Add("4", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
 
-            Assert.Equal(1, store.Count);
+            Assert.Equal(2, store.Count);
         }
 
         [Fact]
