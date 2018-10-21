@@ -103,6 +103,24 @@ namespace SharpAkita.Api.Store
         }
 
         /// <summary>
+        /// Sets how many actions are saved to roll back and for.
+        /// </summary>
+        /// <param name="size"></param>
+        public void SetHistorySize(int size)
+        {
+            history.HistorySize = size;
+        }
+
+        /// <summary>
+        /// Returns the current set history size.
+        /// </summary>
+        /// <returns></returns>
+        public int GetHistorySize()
+        {
+            return history.HistorySize;
+        }
+
+        /// <summary>
         /// Amount of entities.
         /// </summary>
         public int Count => Entites.Count;
