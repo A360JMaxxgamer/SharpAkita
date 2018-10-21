@@ -132,15 +132,32 @@ namespace SharpAkita.Api.Store
         }
 
         /// <summary>
+        /// Returns how many actions are currently saved.
+        /// </summary>
+        /// <returns></returns>
+        public int GetStoreActionsCount()
+        {
+            return history.HistoryItemsCount();
+        }
+
+        /// <summary>
         /// Amount of entities.
         /// </summary>
         public int Count => Entites.Count;
          
+        /// <summary>
+        /// Invokes <see cref="EntityAdded"/>.
+        /// </summary>
+        /// <param name="id"></param>
         internal void InvokeEntityAdded(string id)
         {
             EntityAdded?.Invoke(this, id);
         }
 
+        /// <summary>
+        /// Invokes <see cref="EntityChanged"/>.
+        /// </summary>
+        /// <param name="id"></param>
         internal void InvokeEntityChanged(string id)
         {
             EntityChanged?.Invoke(this, id);

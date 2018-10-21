@@ -11,11 +11,20 @@ namespace SharpAkita.Api.Store.Commands
     {
         private readonly List<IStoreCommand> history;
         private int lastCommandIndex;
+        private int _historySize;
 
         /// <summary>
         /// Amount of actions which are saved. Default is 5.
         /// </summary>
-        internal int HistorySize { get; set; }
+        internal int HistorySize
+        {
+            get => _historySize;
+            set
+            {
+                _historySize = value;
+                RemoveTooManyActions();
+            }
+        }
 
         internal History()
         {
@@ -36,12 +45,12 @@ namespace SharpAkita.Api.Store.Commands
             {
                 history.Remove(c);
             }
-            
+
             history.Add(command);
             lastCommandIndex = history.IndexOf(command);
-            RemoveToManyActions();
+            RemoveTooManyActions();
         }
-        
+
         /// <summary>
         /// Triggers the current command. And moves the index.
         /// </summary>
@@ -67,12 +76,22 @@ namespace SharpAkita.Api.Store.Commands
         }
 
         /// <summary>
+        /// Returns the count of actions saved in history.
+        /// </summary>
+        /// <returns></returns>
+        internal int HistoryItemsCount()
+        {
+            return history.Count;
+        }
+
+
+        /// <summary>
         /// Removes the first action in the history as long as
         /// the actions count is greater than <see cref="HistorySize"/>.
         /// </summary>
-        private void RemoveToManyActions()
+        private void RemoveTooManyActions()
         {
-            while(history.Count > HistorySize)
+            while (history.Count > HistorySize)
             {
                 history.RemoveAt(0);
             }
