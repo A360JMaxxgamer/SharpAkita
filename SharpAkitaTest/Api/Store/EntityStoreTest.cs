@@ -26,10 +26,13 @@ namespace SharpAkitaTest.api
             var store = new EntityStore<StoreTestEntity>();
 
             store.Add("1", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
+            store.Add("2", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
+            store.Add("3", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
             store.Undo();
-            store.Add("1", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
+            store.Undo();
+            store.Add("4", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
 
-            Assert.Equal(1, store.Count);
+            Assert.Equal(2, store.Count);
         }
 
         [Fact]
@@ -105,6 +108,31 @@ namespace SharpAkitaTest.api
         }
 
         [Fact]
+        public void RemoveTest()
+        {
+            var store = new EntityStore<StoreTestEntity>();
+            store.Add("1", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
+            store.Add("2", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
+
+            store.Remove("1");
+
+            Assert.Equal(1, store.Count);
+        }
+
+        [Fact]
+        public void RemoveUndoTest()
+        {
+            var store = new EntityStore<StoreTestEntity>();
+            store.Add("1", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
+            store.Add("2", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
+            store.Remove("1");
+
+            store.Undo();
+
+            Assert.Equal(2, store.Count);
+        }
+
+        [Fact]
         public void GetByIdTest()
         {
             var test = new StoreTestEntity();
@@ -149,6 +177,42 @@ namespace SharpAkitaTest.api
             var select = store.Select();
 
             Assert.Equal(3, select.Count);
+        }
+
+        [Fact]
+        public void GetHistoryTest()
+        {
+            var store = new EntityStore<StoreTestEntity>();
+
+            var historySize = store.GetHistorySize();
+
+            Assert.Equal(5, historySize); // 5 is the default of historysize
+        }
+
+        [Fact]
+        public void SetHistoryTest()
+        {
+            var store = new EntityStore<StoreTestEntity>();
+
+            store.SetHistorySize(10);
+            var historySize = store.GetHistorySize();
+
+            Assert.Equal(10, historySize);
+        }
+
+        [Fact]
+        public void RemoveTooManyActionsTest()
+        {
+            var store = new EntityStore<StoreTestEntity>();
+            store.SetHistorySize(2);
+
+            store.Add("1", new StoreTestEntity());
+            store.Add("2", new StoreTestEntity());
+            store.Add("3", new StoreTestEntity());
+
+            var historyCount = store.GetStoreActionsCount();
+
+            Assert.Equal(2, historyCount);
         }
     }
 

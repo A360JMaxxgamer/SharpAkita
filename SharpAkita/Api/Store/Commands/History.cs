@@ -11,11 +11,26 @@ namespace SharpAkita.Api.Store.Commands
     {
         private readonly List<IStoreCommand> history;
         private int lastCommandIndex;
+        private int _historySize;
+
+        /// <summary>
+        /// Amount of actions which are saved. Default is 5.
+        /// </summary>
+        internal int HistorySize
+        {
+            get => _historySize;
+            set
+            {
+                _historySize = value;
+                RemoveTooManyActions();
+            }
+        }
 
         internal History()
         {
             history = new List<IStoreCommand>();
             lastCommandIndex = -1;
+            HistorySize = 5;
         }
 
         /// <summary>
@@ -25,16 +40,17 @@ namespace SharpAkita.Api.Store.Commands
         internal void Add(IStoreCommand command)
         {
             // remove all after current command
-            var commandsToRemove = history.Where(c => history.IndexOf(c) > lastCommandIndex);
+            var commandsToRemove = history.Where(c => history.IndexOf(c) >= lastCommandIndex).ToList();
             foreach (var c in commandsToRemove)
             {
                 history.Remove(c);
             }
-            
+
             history.Add(command);
             lastCommandIndex = history.IndexOf(command);
+            RemoveTooManyActions();
         }
-        
+
         /// <summary>
         /// Triggers the current command. And moves the index.
         /// </summary>
@@ -56,6 +72,28 @@ namespace SharpAkita.Api.Store.Commands
             {
                 history[lastCommandIndex - 1].Undo();
                 lastCommandIndex--;
+            }
+        }
+
+        /// <summary>
+        /// Returns the count of actions saved in history.
+        /// </summary>
+        /// <returns></returns>
+        internal int HistoryItemsCount()
+        {
+            return history.Count;
+        }
+
+
+        /// <summary>
+        /// Removes the first action in the history as long as
+        /// the actions count is greater than <see cref="HistorySize"/>.
+        /// </summary>
+        private void RemoveTooManyActions()
+        {
+            while (history.Count > HistorySize)
+            {
+                history.RemoveAt(0);
             }
         }
     }

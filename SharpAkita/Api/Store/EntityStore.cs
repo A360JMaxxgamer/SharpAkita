@@ -57,6 +57,17 @@ namespace SharpAkita.Api.Store
         }
 
         /// <summary>
+        /// Removes the entity from the store.
+        /// </summary>
+        /// <param name="id">Id of the entity.</param>
+        public void Remove(string id)
+        {
+            var removeCommand = new RemoveEntityCommand<TEntity>(id, this);
+            history.Add(removeCommand);
+            history.Do();
+        }
+
+        /// <summary>
         /// Returns the specific entity for <paramref name="id"/>.
         /// </summary>
         /// <param name="id"></param>
@@ -103,15 +114,50 @@ namespace SharpAkita.Api.Store
         }
 
         /// <summary>
+        /// Sets how many actions are saved to roll back and for.
+        /// </summary>
+        /// <param name="size"></param>
+        public void SetHistorySize(int size)
+        {
+            history.HistorySize = size;
+        }
+
+        /// <summary>
+        /// Returns the current set history size.
+        /// </summary>
+        /// <returns></returns>
+        public int GetHistorySize()
+        {
+            return history.HistorySize;
+        }
+
+        /// <summary>
+        /// Returns how many actions are currently saved.
+        /// </summary>
+        /// <returns></returns>
+        public int GetStoreActionsCount()
+        {
+            return history.HistoryItemsCount();
+        }
+
+        /// <summary>
         /// Amount of entities.
         /// </summary>
         public int Count => Entites.Count;
          
+        /// <summary>
+        /// Invokes <see cref="EntityAdded"/>.
+        /// </summary>
+        /// <param name="id"></param>
         internal void InvokeEntityAdded(string id)
         {
             EntityAdded?.Invoke(this, id);
         }
 
+        /// <summary>
+        /// Invokes <see cref="EntityChanged"/>.
+        /// </summary>
+        /// <param name="id"></param>
         internal void InvokeEntityChanged(string id)
         {
             EntityChanged?.Invoke(this, id);
