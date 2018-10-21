@@ -108,6 +108,31 @@ namespace SharpAkitaTest.api
         }
 
         [Fact]
+        public void RemoveTest()
+        {
+            var store = new EntityStore<StoreTestEntity>();
+            store.Add("1", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
+            store.Add("2", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
+
+            store.Remove("1");
+
+            Assert.Equal(1, store.Count);
+        }
+
+        [Fact]
+        public void RemoveUndoTest()
+        {
+            var store = new EntityStore<StoreTestEntity>();
+            store.Add("1", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
+            store.Add("2", new StoreTestEntity { IntValue = 1, StringValue = "Hello" });
+            store.Remove("1");
+
+            store.Undo();
+
+            Assert.Equal(2, store.Count);
+        }
+
+        [Fact]
         public void GetByIdTest()
         {
             var test = new StoreTestEntity();
