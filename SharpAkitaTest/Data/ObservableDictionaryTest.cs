@@ -40,5 +40,17 @@ namespace SharpAkitaTest.Data
 
             Assert.Equal("Item[2]", propertyName);
         }
+
+        [Fact]
+        public void GetValueTest()
+        {
+            var dic = new ObservableDictionary<string, int>();
+            dic.Add("1", 1);
+            dic.Add("2", 2);
+
+            var value = dic["2"];
+
+            Assert.Equal(2, value);
+        }
     }
 }
