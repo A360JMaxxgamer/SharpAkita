@@ -1,40 +1,64 @@
 ﻿using System;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
 namespace SharpAkita.Api.Store
 {
-    internal class Store<TState>
+    /// <summary>
+    /// A store which holds a <typeparamref name="TState"/>.
+    /// </summary>
+    /// <typeparam name="TState"></typeparam>
+    public class Store<TState>
     {
-        private BehaviorSubject<TState> store;
+        private readonly BehaviorSubject<TState> store;
 
         private TState currentStoreState;
 
-        //private ReplaySubject<Action> rootDispatcher = new ReplaySubject<Action>();
-
         public Store()
         {
-
+            store = new BehaviorSubject<TState>(currentStoreState);
         }
 
-        public TState SetState(Func<TState, TState> newStateFunction)
+        /// <summary>
+        /// Sets a new state for the store.
+        /// </summary>
+        /// <param name="newState"></param>
+        public void SetState(TState newState)
         {
-            var previousState = currentStoreState;
-            currentStoreState = newStateFunction(currentStoreState);
-
-            InitializeStore();
-            // Todo handle transaction in process
+            currentStoreState = newState;
             DispatchState(currentStoreState);
         }
 
-        private void InitializeStore()
+        /// <summary>
+        /// Sets a new state based on the old one. It updates all properties which are set
+        /// by <paramref name="update"/>.
+        /// </summary>
+        /// <param name="update"></param>
+        public void UpdateState(Action<TState> update)
         {
-            if (store == null)
-            {
-                store = new BehaviorSubject<TState>(currentStoreState);
-                // rootDispatcher.OnNext() Todo evaluate
-            }
+            var updatedState = currentStoreState.Copy();
+            update(updatedState);
+            SetState(updatedState);
         }
 
+        /// <summary>
+        /// Returns an <see cref="IObservable{T}"/> for the <paramref name="map"/>
+        /// function.
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="map"></param>
+        /// <returns></returns>
+        public IObservable<TResult> Select<TResult>(Func<TState, TResult> map)
+        {
+            return store.AsObservable()
+                .Select(map)
+                .DistinctUntilChanged();
+        }
+
+        /// <summary>
+        /// Notifies observer that the store state changed.
+        /// </summary>
+        /// <param name="state"></param>
         private void DispatchState(TState state)
         {
             store.OnNext(state);
