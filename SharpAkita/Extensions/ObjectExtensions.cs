@@ -12,7 +12,7 @@ namespace System
         public static bool IsPrimitive(this Type type)
         {
             if (type == typeof(string)) return true;
-            return (type.IsValueType & type.IsPrimitive);
+            return (type.IsValueType && type.IsPrimitive);
         }
 
         public static object Copy(this object originalObject)
