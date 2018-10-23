@@ -4,7 +4,8 @@ using System.Text;
 
 namespace SharpAkita.Api.Store
 {
-    public class EntityState
+    public class EntityState<TEntity>
     {
+        public Dictionary<string, TEntity> Entites { get; set; }
     }
 }
