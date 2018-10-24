@@ -9,7 +9,7 @@ namespace SharpAkitaTest.Api.Store
         [Fact]
         public void SetStateTest()
         {
-            var store = new Store<StoreTestState>();
+            var store = new Store<StoreTestState>(CreateState);
             StoreTestState testResult = null;
             store.Select(state => state).Subscribe(s => testResult = s);
 
@@ -23,7 +23,7 @@ namespace SharpAkitaTest.Api.Store
         [Fact]
         public void UpdateStateTest()
         {
-            var store = new Store<StoreTestState>();
+            var store = new Store<StoreTestState>(CreateState);
             StoreTestState testResult = null;
             store.Select(state => state).Subscribe(s => testResult = s);
             store.SetState(new StoreTestState { Test1 = 1, Test2 = "Toast" });
@@ -36,6 +36,11 @@ namespace SharpAkitaTest.Api.Store
             Assert.NotNull(testResult);
             Assert.Equal(5, testResult.Test1);
             Assert.Equal("Toast", testResult.Test2);
+        }
+
+        private StoreTestState CreateState()
+        {
+            return new StoreTestState();
         }
     }
 
