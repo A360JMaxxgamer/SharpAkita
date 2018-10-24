@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace SharpAkita.Api.Store
 {
-    public class EntityState
+    public class EntityState<TEntity>
     {
+        public EntityState()
+        {
+            Entities = new Dictionary<string, TEntity>();
+        }           
+
+        public Dictionary<string, TEntity> Entities { get; set; }
     }
 }
