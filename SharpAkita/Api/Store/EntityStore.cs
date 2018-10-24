@@ -7,16 +7,20 @@ namespace SharpAkita.Api.Store
     {
         private string activeId;
 
+        public EntityStore(Func<TEntityState> initialStateCreator) : base(initialStateCreator)
+        {
+        }
+
         public void Add(string identifier, TEntity entity)
         {
             var copiedState = currentStoreState.Copy();
-            copiedState.Entites.Add(identifier, entity);
+            copiedState.Entities.Add(identifier, entity);
             SetState(copiedState);
         }
 
         public void CreateOrReplace(string identifier, TEntity entity)
         {
-            if (currentStoreState.Entites.ContainsKey(identifier))
+            if (currentStoreState.Entities.ContainsKey(identifier))
             {
                 UpdateExistingEntity(identifier, entity);
             }
@@ -29,7 +33,7 @@ namespace SharpAkita.Api.Store
         public void Remove(string identifier)
         {
             var copiedState = currentStoreState.Copy();
-            copiedState.Entites.Remove(identifier);
+            copiedState.Entities.Remove(identifier);
             SetState(copiedState);
         }
 
@@ -38,22 +42,22 @@ namespace SharpAkita.Api.Store
             activeId = identifier;
         }
 
-        public void UpdateActive(Action<TEntity> update)
+        public void UpdateActive(Func<TEntity, TEntity> update)
         {
-            var copiedEntity = currentStoreState.Entites[activeId].Copy();
-            update(copiedEntity);
-            UpdateExistingEntity(activeId, copiedEntity);
+            var copiedEntity = currentStoreState.Entities[activeId].Copy();
+            var updated = update(copiedEntity);
+            UpdateExistingEntity(activeId, updated);
         }
 
         public IDictionary<string, TEntity> GetEntities()
         {
-            return currentStoreState.Entites;
+            return currentStoreState.Entities;
         }
 
         private void UpdateExistingEntity(string identifier, TEntity entity)
         {
             var copiedState = currentStoreState.Copy();
-            copiedState.Entites[identifier] = entity;
+            copiedState.Entities[identifier] = entity;
             SetState(copiedState);
         }
     }

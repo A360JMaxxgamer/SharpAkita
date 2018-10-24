@@ -14,9 +14,11 @@ namespace SharpAkita.Api.Store
 
         protected TState currentStoreState;
 
-        public Store()
+        public Store(Func<TState> initialStateCreator)
         {
-            store = new BehaviorSubject<TState>(currentStoreState);
+            var state = initialStateCreator();
+            store = new BehaviorSubject<TState>(state);
+            currentStoreState = state;
         }
 
         /// <summary>
