@@ -10,7 +10,7 @@ namespace SharpAkitaTest.Query
         [Fact]
         public void SelectTest()
         {
-            var store = new Store<int>();
+            var store = new Store<int>(() => 0);
             var query = new BaseQuery<int>(store);
             var result = false;
             query.Select(s => s).Subscribe(i =>
