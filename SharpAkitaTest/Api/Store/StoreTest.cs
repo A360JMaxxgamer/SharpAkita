@@ -39,9 +39,4 @@ namespace SharpAkitaTest.Api.Store
         }
     }
 
-    internal class StoreTestState
-    {
-        public int Test1 { get; set; }
-        public string Test2 { get; set; }
-    }
 }

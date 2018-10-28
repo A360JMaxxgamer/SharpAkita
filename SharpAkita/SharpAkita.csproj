@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Api\Query\" />
     <Folder Include="Data\" />
   </ItemGroup>
 
