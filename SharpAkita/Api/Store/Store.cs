@@ -10,13 +10,15 @@ namespace SharpAkita.Api.Store
     /// <typeparam name="TState"></typeparam>
     public class Store<TState>
     {
-        private readonly BehaviorSubject<TState> store;
+        protected readonly BehaviorSubject<TState> store;
 
-        private TState currentStoreState;
+        protected TState currentStoreState;
 
-        public Store()
+        public Store(Func<TState> initialStateCreator)
         {
-            store = new BehaviorSubject<TState>(currentStoreState);
+            var state = initialStateCreator();
+            store = new BehaviorSubject<TState>(state);
+            currentStoreState = state;
         }
 
         /// <summary>
@@ -59,7 +61,7 @@ namespace SharpAkita.Api.Store
         /// Notifies observer that the store state changed.
         /// </summary>
         /// <param name="state"></param>
-        private void DispatchState(TState state)
+        protected void DispatchState(TState state)
         {
             store.OnNext(state);
         }
