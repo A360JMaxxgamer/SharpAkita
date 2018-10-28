@@ -3,7 +3,7 @@
   <PropertyGroup>
     <DebugType>Full</DebugType>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Version>0.0.5</Version>
     <Authors>Marco Hamann</Authors>
     <Description>A state management system which is based on https://github.com/datorama/akita. It is a C# port.
