@@ -1,0 +1,24 @@
+﻿<Window
+    x:Class="SharpAkitaExample.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:views="clr-namespace:SharpAkitaExample.Views"
+    Title="SharpAkitaTest"
+    Width="525"
+    Height="350"
+    prism:ViewModelLocator.AutoWireViewModel="True">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <views:AddTodoView
+            Grid.Column="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center" />
+        <views:TodoListView Grid.Column="1" />
+        <views:TodoListView Grid.Column="2" />
+    </Grid>
+</Window>
